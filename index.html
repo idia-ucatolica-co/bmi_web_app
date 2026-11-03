@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de IMC</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #5a67d8;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    .result-number {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .result-text {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* Colores según la categoría del IMC */
+    .bajo-peso { background-color: #feebc8; color: #c05621; }
+    .normal { background-color: #c6f6d5; color: #22543d; }
+    .sobrepeso { background-color: #feebc8; color: #dd6b20; }
+    .obesidad { background-color: #fed7d7; color: #9b2c2c; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Calculadora de IMC</h1>
+
+    <div class="input-group">
+      <label for="peso">Peso (kg)</label>
+      <input type="number" id="peso" placeholder="Ej. 70" step="0.1" min="1">
+    </div>
+
+    <div class="input-group">
+      <label for="altura">Altura (cm)</label>
+      <input type="number" id="altura" placeholder="Ej. 175" step="1" min="1">
+    </div>
+
+    <button onclick="calcularIMC()">Calcular</button>
+
+    <div id="resultado" class="result">
+      <div id="imcValor" class="result-number">0.0</div>
+      <div id="imcCategoria" class="result-text">---</div>
+    </div>
+  </div>
+
+  <script>
+    function calcularIMC() {
+      const peso = parseFloat(document.getElementById('peso').value);
+      const alturaCm = parseFloat(document.getElementById('altura').value);
+      const resultadoDiv = document.getElementById('resultado');
+      const imcValorDiv = document.getElementById('imcValor');
+      const imcCategoriaDiv = document.getElementById('imcCategoria');
+
+      if (isNaN(peso) || isNaN(alturaCm) || peso <= 0 || alturaCm <= 0) {
+        alert("Por favor, ingresa un peso y una altura válidos.");
+        return;
+      }
+
+      // Convertir altura de cm a metros
+      const alturaM = alturaCm / 100;
+      
+      // Calcular IMC (Peso / Altura^2)
+      const imc = (peso / (alturaM * alturaM)).toFixed(1);
+
+      // Limpiar clases previas de color
+      resultadoDiv.className = "result";
+
+      let categoria = "";
+      let claseColor = "";
+
+      if (imc < 18.5) {
+        categoria = "Bajo peso";
+        claseColor = "bajo-peso";
+      } else if (imc >= 18.5 && imc < 25) {
+        categoria = "Peso normal";
+        claseColor = "normal";
+      } else if (imc >= 25 && imc < 30) {
+        categoria = "Sobrepeso";
+        claseColor = "sobrepeso";
+      } else {
+        categoria = "Obesidad";
+        claseColor = "obesidad";
+      }
+
+      // Mostrar resultados y aplicar estilos
+      imcValorDiv.textContent = imc;
+      imcCategoriaDiv.textContent = categoria;
+      resultadoDiv.classList.add(claseColor);
+      resultadoDiv.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
